@@ -1,0 +1,48 @@
+- name: Simple Debug Script
+  hosts: bfsource
+  become: yes
+  gather_facts: yes
+
+  tasks:
+    - name: Grep BF device
+      shell: "mlnx-sf -a show | grep -i 'Index:' | awk -F' ' '{print $3}'"
+      register: grep_output2
+
+    - debug:
+        msg: "{{ item }}"
+      loop: "{{ grep_output2.stdout_lines|list }}"
+
+    # - debug:
+    #     msg: "{{ hostvars[inventory_hostname].ansible_hostname }}"
+
+    # - debug:
+    #     msg: "{{ ansible_facts.default_ipv4.interface }}"
+
+    # - debug:
+    #     msg: "mlxconfig -d /dev/mst/mt41686_pciconf0 s INTERNAL_CPU_MODEL=0 "
+
+    # - debug:
+    #     msg: "mlxconfig -d {{ ansible_facts.default_ipv4.interface }} s INTERNAL_CPU_MODEL=0 "
+
+    # - name: Print all available facts
+    #   ansible.builtin.debug:
+    #     var: ansible_facts
+
+    #  - debug:
+    #      msg: "{{ hostvars[inventory_hostname].interfaces }"
+
+    # - debug:
+    #     msg: "{{ switch[inventory_hostname].borderIPv4 | ipaddr('network') }}/{{ switch[inventory_hostname].borderIPv4 | ipaddr('prefix') }}"
+    #     msg: "{{ switch[inventory_hostname].borderIPv4 | ansible.netcommon.ipaddr }}"
+
+    # - debug:
+    #     msg: "{{ bfoobdhcp | ipaddr('broadcast')}}"
+
+    # - name: Ansible find file examples
+    #   find:
+    #     paths: /dev/mst
+    #     patterns: "*"
+    #     register: files_matched
+
+    # - debug:
+    #     msg: "{{ files_matched.files }}"

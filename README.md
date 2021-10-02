@@ -1,91 +1,131 @@
-# DPU PoC - Grafana Monitoring
+# dpu-poc-grafana
 
-This is an Ansible Playbook for a DPU PoC to monitor a Bluefield-2(+) card using Grafana
+### Description
 
-## Getting started
+This is a simple Ansible Playbook that will output DPU statistics into Grafana's Loki cloud:
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+This playbook is described in detail on Galaxy at the following location:
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+https://galaxy.ansible.com/nleiva/grafana_agent
 
-## Add your files
+### Notes
 
-- [ ] [Create](https://gitlab.com/-/experiment/new_project_readme_content:6fefb1354e1a0053fe07b0c1c65679ce?https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://gitlab.com/-/experiment/new_project_readme_content:6fefb1354e1a0053fe07b0c1c65679ce?https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://gitlab.com/-/experiment/new_project_readme_content:6fefb1354e1a0053fe07b0c1c65679ce?https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+This imports the Ansible Galaxy role that is described here:
+
+https://galaxy.ansible.com/nleiva/grafana_agent
+
+### Instructions:
+
+1. First, add the Ansible Galaxy role by entering the following:
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/nvidia-networking/systems-engineering/dpu-enablement/dpu-poc-grafana-monitoring.git
-git branch -M main
-git push -uf origin main
+ansible-galaxy collection install community.general
 ```
 
-## Integrate with your tools
+2. Next, you will need to sign up for an account with Grafana the following location:
 
-- [ ] [Set up project integrations](https://gitlab.com/-/experiment/new_project_readme_content:6fefb1354e1a0053fe07b0c1c65679ce?https://docs.gitlab.com/ee/user/project/integrations/)
+https://grafana.com/auth/sign-up/create-user
 
-## Collaborate with your team
+3. Next, you will need to edit the following in the "group_vars > all.yml" file:
 
-- [ ] [Invite team members and collaborators](https://gitlab.com/-/experiment/new_project_readme_content:6fefb1354e1a0053fe07b0c1c65679ce?https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://gitlab.com/-/experiment/new_project_readme_content:6fefb1354e1a0053fe07b0c1c65679ce?https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://gitlab.com/-/experiment/new_project_readme_content:6fefb1354e1a0053fe07b0c1c65679ce?https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Automatically merge when pipeline succeeds](https://gitlab.com/-/experiment/new_project_readme_content:6fefb1354e1a0053fe07b0c1c65679ce?https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+"dpu_loki_user" -> This is the username that you created in Step #1
 
-## Test and Deploy
+"dpu_prometheus_user" -> This is the username that you created in Step #1
 
-Use the built-in continuous integration in GitLab.
+"dpu_grafana_api_key" -> You can generate a new Grafana API Key by clicking on the "API Keys" under "Manage your account" on the right side of the dashboard.
 
-- [ ] [Get started with GitLab CI/CD](https://gitlab.com/-/experiment/new_project_readme_content:6fefb1354e1a0053fe07b0c1c65679ce?https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://gitlab.com/-/experiment/new_project_readme_content:6fefb1354e1a0053fe07b0c1c65679ce?https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://gitlab.com/-/experiment/new_project_readme_content:6fefb1354e1a0053fe07b0c1c65679ce?https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://gitlab.com/-/experiment/new_project_readme_content:6fefb1354e1a0053fe07b0c1c65679ce?https://docs.gitlab.com/ee/user/clusters/agent/)
+4. Run the Ansible playbook with the following command:
 
-***
+```
+ansible-playbook dpu-poc-grafana.yml
+```
 
-# Editing this README
+Output:
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://gitlab.com/-/experiment/new_project_readme_content:6fefb1354e1a0053fe07b0c1c65679ce?https://www.makeareadme.com/) for this template.
+```
+mcourtney@ubuntu:~/dpugrafana$ ansible-playbook dpu-poc-grafana.yml
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+PLAY [bfs] *****************************************************************************************
 
-## Name
-Choose a self-explaining name for your project.
+TASK [Gathering Facts] *****************************************************************************
+Friday 01 October 2021  23:48:40 -0500 (0:00:00.013)       0:00:00.013 ********
+ok: [bfipsec1]
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+TASK [nleiva.grafana_agent : Download Agent file] **************************************************
+Friday 01 October 2021  23:48:44 -0500 (0:00:03.508)       0:00:03.522 ********
+changed: [bfipsec1]
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+TASK [nleiva.grafana_agent : Install unzip] ********************************************************
+Friday 01 October 2021  23:48:47 -0500 (0:00:03.238)       0:00:06.760 ********
+[WARNING]: Updating cache and auto-installing missing dependency: python-apt
+ok: [bfipsec1]
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+TASK [nleiva.grafana_agent : Unarchive Agent] ******************************************************
+Friday 01 October 2021  23:49:21 -0500 (0:00:34.539)       0:00:41.300 ********
+changed: [bfipsec1]
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+TASK [nleiva.grafana_agent : Create directory for Agent's config file] *****************************
+Friday 01 October 2021  23:49:26 -0500 (0:00:04.128)       0:00:45.428 ********
+changed: [bfipsec1]
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+TASK [nleiva.grafana_agent : Create Agent's config file] *******************************************
+Friday 01 October 2021  23:49:27 -0500 (0:00:01.477)       0:00:46.905 ********
+changed: [bfipsec1]
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+TASK [nleiva.grafana_agent : Template the new service file for Grafana agent] **********************
+Friday 01 October 2021  23:49:29 -0500 (0:00:01.741)       0:00:48.647 ********
+changed: [bfipsec1]
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+TASK [nleiva.grafana_agent : Reload and start service Grafana agent] *******************************
+Friday 01 October 2021  23:49:31 -0500 (0:00:01.741)       0:00:50.388 ********
+changed: [bfipsec1]
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+TASK [nleiva.grafana_agent : Install Promtail] *****************************************************
+Friday 01 October 2021  23:49:33 -0500 (0:00:02.661)       0:00:53.050 ********
+included: /home/mcourtney/.ansible/roles/nleiva.grafana_agent/tasks/promtail.yml for bfipsec1
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+TASK [nleiva.grafana_agent : Download latest Promtail release] *************************************
+Friday 01 October 2021  23:49:33 -0500 (0:00:00.046)       0:00:53.096 ********
+changed: [bfipsec1]
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+TASK [nleiva.grafana_agent : Create directory for Promtail's files] ********************************
+Friday 01 October 2021  23:49:36 -0500 (0:00:02.529)       0:00:55.625 ********
+changed: [bfipsec1]
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+TASK [nleiva.grafana_agent : Unarchive Promtail] ***************************************************
+Friday 01 October 2021  23:49:37 -0500 (0:00:01.393)       0:00:57.019 ********
+changed: [bfipsec1]
 
-## License
-For open source projects, say how it is licensed.
+TASK [nleiva.grafana_agent : Create an Promtail config file] ***************************************
+Friday 01 October 2021  23:49:40 -0500 (0:00:02.428)       0:00:59.447 ********
+changed: [bfipsec1]
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+TASK [nleiva.grafana_agent : Template the new service file for Promtail agent] *********************
+Friday 01 October 2021  23:49:41 -0500 (0:00:01.659)       0:01:01.107 ********
+changed: [bfipsec1]
 
+TASK [nleiva.grafana_agent : Reload and start service Promtail agent] ******************************
+Friday 01 October 2021  23:49:43 -0500 (0:00:01.703)       0:01:02.810 ********
+changed: [bfipsec1]
+
+PLAY RECAP *****************************************************************************************
+bfipsec1                   : ok=15   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+Friday 01 October 2021  23:50:16 -0500 (0:00:33.299)       0:01:36.110 ********
+===============================================================================
+nleiva.grafana_agent : Install unzip ------------------------------------------------------- 34.54s
+nleiva.grafana_agent : Reload and start service Promtail agent ----------------------------- 33.30s
+nleiva.grafana_agent : Unarchive Agent ------------------------------------------------------ 4.13s
+Gathering Facts ----------------------------------------------------------------------------- 3.51s
+nleiva.grafana_agent : Download Agent file -------------------------------------------------- 3.24s
+nleiva.grafana_agent : Reload and start service Grafana agent ------------------------------- 2.66s
+nleiva.grafana_agent : Download latest Promtail release ------------------------------------- 2.53s
+nleiva.grafana_agent : Unarchive Promtail --------------------------------------------------- 2.43s
+nleiva.grafana_agent : Template the new service file for Grafana agent ---------------------- 1.74s
+nleiva.grafana_agent : Create Agent's config file ------------------------------------------- 1.74s
+nleiva.grafana_agent : Template the new service file for Promtail agent --------------------- 1.70s
+nleiva.grafana_agent : Create an Promtail config file --------------------------------------- 1.66s
+nleiva.grafana_agent : Create directory for Agent's config file ----------------------------- 1.48s
+nleiva.grafana_agent : Create directory for Promtail's files -------------------------------- 1.39s
+nleiva.grafana_agent : Install Promtail ----------------------------------------------------- 0.05s
+```

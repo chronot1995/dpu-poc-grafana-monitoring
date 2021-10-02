@@ -1,0 +1,13 @@
+[bfs]
+bfipsec1 ansible_host=10.10.150.200
+
+[bfs:vars]
+ansible_user=ubuntu
+ansible_password=ubuntu
+
+[all:vars]
+ansible_user=pocuser
+ansible_password=password123
+ansible_sudo_pass=password123
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+discovered_interpreter_python="/usr/bin/python3"
