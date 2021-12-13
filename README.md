@@ -1,4 +1,4 @@
-# dpu-poc-grafana
+# dpu-poc-grafana-monitoring
 
 ### Description
 
@@ -8,18 +8,13 @@ This playbook is described in detail on Galaxy at the following location:
 
 https://galaxy.ansible.com/nleiva/grafana_agent
 
-### Notes
-
-This imports the Ansible Galaxy role that is described here:
-
-https://galaxy.ansible.com/nleiva/grafana_agent
-
 ### Instructions:
 
 1. First, add the Ansible Galaxy role by entering the following:
 
 ```
 ansible-galaxy collection install community.general
+ansible-galaxy install nleiva.grafana_agent
 ```
 
 2. Next, you will need to sign up for an account with Grafana the following location:
@@ -28,16 +23,16 @@ https://grafana.com/auth/sign-up/create-user
 
 3. Next, you will need to edit the following in the "group_vars > all.yml" file:
 
-"dpu_loki_user" -> This is the username that you created in Step #1
+"dpu_loki_user" -> In Grafana Cloud, go to the "gear" / Configuration > Data Sources > "The Loki instance" > Basic Auth Details > "User"
 
-"dpu_prometheus_user" -> This is the username that you created in Step #1
+"dpu_prometheus_user" -> In Grafana Cloud, go to the "gear" / Configuration > Data Sources > "The Prometheus instance" > Basic Auth Details > "User"
 
-"dpu_grafana_api_key" -> You can generate a new Grafana API Key by clicking on the "API Keys" under "Manage your account" on the right side of the dashboard.
+"dpu_grafana_api_key" -> Log into Grafana.com, not the <org>.grafana.com instance which shows the dashboards. On the left side, go to Security > API Keys > and "+Add API Key" > give it the "MetricsPublisher" role
 
 4. Run the Ansible playbook with the following command:
 
 ```
-ansible-playbook dpu-poc-grafana.yml
+ansible-playbook dpu-poc-grafana-monitoring.yml
 ```
 
 Output:
@@ -128,4 +123,61 @@ nleiva.grafana_agent : Create an Promtail config file --------------------------
 nleiva.grafana_agent : Create directory for Agent's config file ----------------------------- 1.48s
 nleiva.grafana_agent : Create directory for Promtail's files -------------------------------- 1.39s
 nleiva.grafana_agent : Install Promtail ----------------------------------------------------- 0.05s
+```
+
+### Viewing Log Data in Grafana Cloud:
+
+1. Click the "Explore" button > in the top drop down select the Loki / "logs" instance
+
+2. Click the "Log browser" button, which should be blue, click the IP address of the "hostname" > click the "Show logs" button.
+
+3. From here, you should see log information in the bottom pane.
+
+### Prometheus Graph Data in Grafana Cloud:
+
+1. Click the "Explore" button > in the top drop down select the Prometheus / "prom" instance
+
+2. Click the "Metrics browser" button, which should be blue, to see what data is being sent from the DPU to Grafana Cloud.
+
+3. To put together a testing dashboard, click the Dashboards > Manage > "Import" button in the top right-hand corner.
+
+For this demo, use the following Dashboard:
+
+https://grafana.com/grafana/dashboards/10180
+
+4. Here, enter "10180" in the "Import via grafana.com" and click the "Load" button
+
+5. Next, click Dashboards > Manage > General > "Linux Hosts Metrics"
+
+This will load the above Dashboard with the data for the DPU
+
+### Extras
+
+1. Promtail is the log aggregator that sends data to the Grafana Cloud. The default configuration file is found at:
+
+```
+/opt/promtail/promtail-config.yaml
+```
+
+The default log setting has the following configuration:
+
+```
+__path__: /var/log/*.log
+```
+
+In order to gather more data from the box, it might be worthwhile to change this to the following:
+
+```
+__path__: /var/log/*log
+```
+
+The above will now grab and send data from the "syslog" file under /var/log up to Grafana Cloud
+
+After you change the above, you will need to run the following to restart the Promtail service:
+
+```
+sudo systemctl stop promtail.service
+sudo systemctl daemon-reload
+sudo systemctl start promtail.service
+sudo systemctl status promtail.service
 ```

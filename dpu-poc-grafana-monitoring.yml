@@ -1,4 +1,4 @@
-- hosts: bfs
+- hosts: dpus
   become: yes
   vars:
     prometheus_user: "{{ dpu_prometheus_user }}"

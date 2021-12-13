@@ -1,5 +1,10 @@
 ## Beginning of https://gist.github.com/octocat/9257657
 
+# Testing Host files #
+###################
+hosts.*
+*.mike
+
 # Compiled source #
 ###################
 *.com
