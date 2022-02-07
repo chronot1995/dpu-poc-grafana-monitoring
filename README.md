@@ -1,7 +1,9 @@
 # Deprecated
 
 The Grafana Monitoring play can be found at the following location in the DPU PoC Kit:
+```
 https://gitlab.com/nvidia/networking/bluefield/dpu-poc-kit/-/tree/main/roles/grafana-monitoring
+```
 
 # dpu-poc-grafana-monitoring
 
